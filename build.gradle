@@ -4,21 +4,71 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.9.6"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
 allprojects {
+    apply plugin: "com.jfrog.artifactory"
+    apply plugin: 'maven-publish'
     repositories {
         google()
         jcenter()
-        
+
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+project('slauth') {
+    ext {
+        libraryVersion = '0.1.0'
+    }
+    artifactoryPublish.dependsOn('build')
+    publishing {
+        publications {
+            aar(MavenPublication) {
+                groupId = 'devolutions'
+                artifactId = project.getName()
+                version = project.ext.libraryVersion
+                // Tell maven to prepare the generated "*.aar" file for publishing
+                artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+            }
+        }
+    }
+
+    artifactoryPublish {
+        publications(publishing.publications.aar)
+    }
+}
+
+artifactory {
+    contextUrl = properties.getProperty("artifactory_contextUrl")
+    publish {
+        repository {
+            repoKey = 'lucid-gradle-local'
+            username = properties.getProperty("artifactory_user")
+            password = properties.getProperty("artifactory_password")
+            maven = true
+
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'lucid-gradle'
+            username = properties.getProperty("artifactory_user")
+            password = properties.getProperty("artifactory_password")
+            maven = true
+
+        }
     }
 }
 
