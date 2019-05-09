@@ -30,7 +30,7 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 project('slauth') {
     ext {
-        libraryVersion = '0.1.0'
+        libraryVersion = '0.2.0'
     }
     artifactoryPublish.dependsOn('build')
     publishing {

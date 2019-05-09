@@ -17,10 +17,14 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+    public void totpUris() {
+        String baseUri = "otpauth://totp/john.doe@email.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&algorithm=SHA1&digits=6&period=30&issuer=Slauth";
+        Totp totp = new Totp(baseUri);
 
-        assertEquals("net.devolutions.slauth.test", appContext.getPackageName());
+        String genUri = totp.toUri("john.doe@email.com", "Slauth");
+
+        System.out.println(genUri);
+
+        assertEquals(baseUri, genUri);
     }
 }
