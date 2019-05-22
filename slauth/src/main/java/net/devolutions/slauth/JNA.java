@@ -29,6 +29,8 @@ public interface JNA extends Library {
 
     String totp_gen(Pointer totp);
 
+    String totp_gen_with(Pointer totp, long elapsed);
+
     String totp_to_uri(Pointer totp, String label, String issuer);
 
     Boolean totp_validate_current(Pointer totp, String code);

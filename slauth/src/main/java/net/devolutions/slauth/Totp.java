@@ -15,6 +15,10 @@ public class Totp extends RustObject {
         return JNA.INSTANCE.totp_gen(raw);
     }
 
+    public String genWith(long elapsed) {
+        return JNA.INSTANCE.totp_gen_with(raw, elapsed);
+    }
+
     public String toUri(String label, String issuer) {
         return JNA.INSTANCE.totp_to_uri(raw, label, issuer);
     }

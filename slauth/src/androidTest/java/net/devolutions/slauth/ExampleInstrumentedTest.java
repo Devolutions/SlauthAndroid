@@ -26,5 +26,17 @@ public class ExampleInstrumentedTest {
         System.out.println(genUri);
 
         assertEquals(baseUri, genUri);
+
+        String code1 = totp.gen();
+
+        try {
+            Thread.sleep(31000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String code2 = totp.genWith(31);
+
+        assertEquals(code1, code2);
     }
 }
