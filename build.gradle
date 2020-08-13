@@ -7,7 +7,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.5.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.9.6"
         // NOTE: Do not place your application dependencies here; they belong
@@ -30,7 +30,7 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 project('slauth') {
     ext {
-        libraryVersion = '0.4.0'
+        libraryVersion = '0.4.1'
     }
     artifactoryPublish.dependsOn('build')
     publishing {
@@ -51,12 +51,12 @@ project('slauth') {
 }
 
 artifactory {
-    contextUrl = properties.getProperty("artifactory_contextUrl")
+    contextUrl = properties['artifactory_contextUrl']
     publish {
         repository {
             repoKey = 'lucid-gradle-local'
-            username = properties.getProperty("artifactory_user")
-            password = properties.getProperty("artifactory_password")
+            username = properties['artifactory_user']
+            password = properties['artifactory_password']
             maven = true
 
         }
@@ -64,8 +64,8 @@ artifactory {
     resolve {
         repository {
             repoKey = 'lucid-gradle'
-            username = properties.getProperty("artifactory_user")
-            password = properties.getProperty("artifactory_password")
+            username = properties['artifactory_user']
+            password = properties['artifactory_password']
             maven = true
 
         }
