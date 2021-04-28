@@ -7,7 +7,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:4.1.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.9.6"
         // NOTE: Do not place your application dependencies here; they belong
@@ -16,7 +16,6 @@ buildscript {
 }
 
 allprojects {
-    apply plugin: "com.jfrog.artifactory"
     apply plugin: 'maven-publish'
     repositories {
         google()
@@ -32,8 +31,20 @@ project('slauth') {
     ext {
         libraryVersion = '0.4.2'
     }
-    artifactoryPublish.dependsOn('build')
     publishing {
+        repositories {
+            maven {
+                name = "cloudsmith"
+                url = "https://maven.cloudsmith.io/devolutions/maven-public/"
+                def releasesRepoUrl = "https://maven.cloudsmith.io/devolutions/maven-public/"
+                def snapshotsRepoUrl = "https://maven.cloudsmith.io/devolutions/maven-public/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = System.getenv('CLOUDSMITH_USERNAME')
+                    password = System.getenv('CLOUDSMITH_API_KEY')
+                }
+            }
+        }
         publications {
             aar(MavenPublication) {
                 groupId = 'devolutions'
@@ -42,32 +53,6 @@ project('slauth') {
                 // Tell maven to prepare the generated "*.aar" file for publishing
                 artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
             }
-        }
-    }
-
-    artifactoryPublish {
-        publications(publishing.publications.aar)
-    }
-}
-
-artifactory {
-    contextUrl = properties['artifactory_contextUrl']
-    publish {
-        repository {
-            repoKey = 'lucid-gradle-local'
-            username = properties['artifactory_user']
-            password = properties['artifactory_password']
-            maven = true
-
-        }
-    }
-    resolve {
-        repository {
-            repoKey = 'lucid-gradle'
-            username = properties['artifactory_user']
-            password = properties['artifactory_password']
-            maven = true
-
         }
     }
 }
