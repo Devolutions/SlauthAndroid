@@ -8,7 +8,7 @@ allprojects {
         google()
         jcenter()
         maven {
-            url 'https://devolutions.bintray.com/maven'
+            url "https://dl.cloudsmith.io/public/devolutions/maven-public/maven/"
         }
     }
 }
