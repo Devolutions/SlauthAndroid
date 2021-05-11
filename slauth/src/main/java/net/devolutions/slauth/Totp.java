@@ -7,8 +7,11 @@ public class Totp extends RustObject {
         System.loadLibrary("slauth");
     }
 
-    public Totp(String uri) {
+    public Totp(String uri) throws Exception {
         this.raw = JNA.INSTANCE.totp_from_uri(uri);
+        if (this.raw == null) {
+            throw new Exception();
+        }
     }
 
     public String gen() {

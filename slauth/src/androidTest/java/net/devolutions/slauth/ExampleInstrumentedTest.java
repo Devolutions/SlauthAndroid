@@ -18,7 +18,12 @@ public class ExampleInstrumentedTest {
     @Test
     public void totpUris() {
         String baseUri = "otpauth://totp/john.doe@email.com?secret=12a9f88729b3bf4477f76b6c65d0e144d8ddc8f1&algorithm=SHA1&digits=6&period=30&issuer=Slauth";
-        Totp totp = new Totp(baseUri);
+        Totp totp = null;
+        try {
+            totp = new Totp(baseUri);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         String genUri = totp.toUri("john.doe@email.com", "Slauth");
 

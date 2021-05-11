@@ -7,8 +7,11 @@ public class Hotp extends RustObject {
         System.loadLibrary("slauth");
     }
 
-    public Hotp(String uri) {
+    public Hotp(String uri) throws Exception {
         this.raw = JNA.INSTANCE.hotp_from_uri(uri);
+        if (this.raw == null) {
+            throw new Exception();
+        }
     }
 
     public String gen() {
